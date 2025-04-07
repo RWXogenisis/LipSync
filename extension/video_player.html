@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Background Animation Container -->
+    <div id="backgroundJS"></div>
+
+    <div id="content">
+        <h1>YouTube Video Processor</h1>
+
+        <!-- YouTube Video Embed -->
+        <div>
+            <iframe id="ytplayer" width="700" height="400" 
+                frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+            </iframe>
+        </div>
+
+        <p id="status">Fetching YouTube URL...</p>
+        <p id="timestamp">Current Timestamp: 0s</p>
+        <p id="segmentData">Segment Data: Waiting for updates...</p>
+    </div>
+
+    <!-- External Scripts -->
+    <script src="three.min.js"></script>
+    <script src="vanta.birds.min.js"></script>
+    <script src="backgroundWallpaper.js"></script> <!-- Background effect -->
+    <script src="video_player.js"></script> <!-- YouTube video handling -->
+
+</body>
+</html>

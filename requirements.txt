@@ -1,0 +1,18 @@
+--extra-index-url https://download.pytorch.org/whl/cu118
+
+Flask
+flask-cors
+language_tool_python
+mediapipe
+nltk
+numpy
+opencv-python
+opencv-python-headless
+symspellpy
+torch
+torchaudio
+torchvision
+tqdm
+watchdog
+waitress
+yt-dlp
