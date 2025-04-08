@@ -8,13 +8,17 @@ from nltk.metrics import edit_distance
 from symspellpy import SymSpell, Verbosity
 
 class Preprocessor:
-    """Preprocessor class for initializing and loading NLP resources like spellcheckers and grammar tools."""
-    # Author(s): Hareesh S
+    """Preprocessor class for initializing and loading NLP resources like spellcheckers and grammar tools.
+    
+    Author(s): Hareesh S
+    """
     
     def __init__(self):
         """
         Initializes the Preprocessor class by ensuring necessary NLP resources are downloaded.
         Loads SymSpell for spelling correction and LanguageTool for grammar correction.
+
+        Author(s): Hareesh S
         """
         # Ensure necessary NLTK data packages are downloaded
         self._safe_nltk_download("punkt", "tokenizers")
@@ -43,6 +47,8 @@ class Preprocessor:
         Args:
             package (str): The NLTK package name.
             category (str): The category of the NLTK data (e.g., "tokenizers", "corpora").
+
+        Author(s): Hareesh S
         """
         try:
             nltk.data.find(f"{category}/{package}")
@@ -50,8 +56,10 @@ class Preprocessor:
             nltk.download(package)
 
 class SpellCorrector:
-    """Handles spelling and grammar correction using the Preprocessor class."""
-    # Author(s): Hareesh S
+    """Handles spelling and grammar correction using the Preprocessor class.
+    
+    Author(s): Hareesh S
+    """
     
     def __init__(self, preprocessor: Preprocessor):
         """
@@ -60,6 +68,8 @@ class SpellCorrector:
         
         Args:
             preprocessor (Preprocessor): The Preprocessor instance containing spellchecking and grammar tools.
+
+        Author(s): Hareesh S
         """
         self.preprocessor = preprocessor
     
@@ -72,6 +82,8 @@ class SpellCorrector:
         
         Returns:
             bool: True if the word is a number, False otherwise.
+
+        Author(s): Hareesh S
         """
         return re.fullmatch(r"\d{1,3}(?:,\d{3})*|\d+", word) is not None  # Check if it is a number
 
@@ -84,6 +96,8 @@ class SpellCorrector:
         
         Returns:
             bool: True if the word is valid, False otherwise.
+
+        Author(s): Hareesh S
         """
         return word.lower() in self.preprocessor.valid_words  # Check validity against the loaded words list
 
@@ -96,6 +110,8 @@ class SpellCorrector:
         
         Returns:
             str: The word with excessive repeated letters removed.
+
+        Author(s): Hareesh S
         """
         return re.sub(r'(.)\1{2,}', r'\1', word)  # Limit repeating letters to two occurrences
 
@@ -108,6 +124,8 @@ class SpellCorrector:
         
         Returns:
             str: The corrected word.
+
+        Author(s): Hareesh S
         """
         word = self.remove_repeated_letters(word)  # Handle excessive letter repetition first
 
@@ -139,6 +157,8 @@ class SpellCorrector:
         
         Returns:
             str: The corrected sentence.
+
+        Author(s): Hareesh S
         """
         words_list = nltk.word_tokenize(sentence)  # Tokenize the sentence into words
 
