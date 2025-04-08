@@ -1,3 +1,4 @@
+# All the author(s): Hareesh S, S Karun Vikhash
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -46,6 +47,8 @@ def loadVideoSegments():
 
     Returns:
         None
+
+    Author(s): Hareesh S
     """
     global video_segments
     folder_path = BASE_DIR
@@ -74,6 +77,8 @@ def process_segment(video_filename):
 
     Returns:
         None
+
+    Author(s): Hareesh S
     """
     global processed_count
     video_filename = os.path.join(BASE_DIR, video_filename)
@@ -111,6 +116,8 @@ def updateTimestamp():
 
     Returns:
         JSON: Success status, timestamp, and segment data (or error message).
+
+    Author(s): Hareesh S, S Karun Vikhash
     """
     global current_timestamp, segment_index, video_segments
     data = request.json
@@ -156,6 +163,8 @@ def getTimestamp():
 
     Returns:
         JSON: Current timestamp.
+
+    Author(s): Hareesh S
     """
     return jsonify({"timestamp": current_timestamp})
 
@@ -172,6 +181,8 @@ def receiveUrl():
 
     Returns:
         JSON: Success status and message.
+
+    Author(s): Hareesh S
     """
     global youtube_url, current_timestamp, video_segments, segment_index
     data = request.json
@@ -219,6 +230,8 @@ def processingStatus():
 
     Returns:
         JSON: Processing status and counts.
+
+    Author(s): Hareesh S
     """
     with cache_lock:
         cached_files = list(prediction_cache.keys())
@@ -242,6 +255,8 @@ def getUrl():
 
     Returns:
         JSON: YouTube URL or error message.
+
+    Author(s): Hareesh S
     """
     if youtube_url:
         return jsonify({"youtubeURL": youtube_url})
