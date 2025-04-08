@@ -7,6 +7,7 @@ from nltk.corpus import words
 from nltk.metrics import edit_distance
 from symspellpy import SymSpell, Verbosity
 
+# ---------------------------- Main Logic ---------------------------- #
 class Preprocessor:
     """Preprocessor class for initializing and loading NLP resources like spellcheckers and grammar tools.
     
