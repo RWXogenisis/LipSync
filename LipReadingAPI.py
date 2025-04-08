@@ -43,6 +43,8 @@ class VideoProcessorBackend:
         Args:
             target_height (int): Height of the output lip region frame.
             target_width (int): Width of the output lip region frame.
+
+        Author(s): Hareesh S
         """
         self.target_height = target_height
         self.target_width = target_width
@@ -69,6 +71,8 @@ class VideoProcessorBackend:
         Returns:
             torch.Tensor: A normalized tensor of shape (num_frames, target_height, target_width) containing
                           the grayscale lip region for each frame.
+
+        Author(s): Hareesh S 
         """
         cap = cv2.VideoCapture(path)
         
@@ -129,6 +133,7 @@ class LipNetDataset(Dataset):
         base_dir (str): Directory where video files are stored.
         target_length (int): Desired number of frames per video sample.
         video_processor (VideoProcessorBackend): Processor to extract and preprocess lip regions from videos.
+        
     Author(s): S Karun Vikhash
     """
 
@@ -141,6 +146,8 @@ class LipNetDataset(Dataset):
             base_dir (str): Path to the directory containing video files.
             target_length (int): Number of frames each sample should have.
             video_processor (VideoProcessorBackend): Preprocessor for extracting lip regions.
+
+        Author(s): S Karun Vikhash
         """
         self.file_paths = file_paths            # Store the list of file identifiers or paths
         self.base_dir = base_dir                # Path where video files are located
@@ -150,6 +157,8 @@ class LipNetDataset(Dataset):
     def __len__(self):
         """
         Returns the number of video samples in the dataset.
+
+        Author(s): S Karun Vikhash
         """
         return len(self.file_paths)  # Dataset size is the number of file paths provided
 
@@ -162,6 +171,8 @@ class LipNetDataset(Dataset):
 
         Returns:
             torch.Tensor: Preprocessed video tensor of shape (1, target_length, height, width)
+
+        Author(s): S Karun Vikhash
         """
         # Extract base name (without extension), construct full path to the video file
         file_name = os.path.splitext(os.path.basename(self.file_paths[idx]))[0]
@@ -194,10 +205,14 @@ class LipNetModel(nn.Module):
 
     Args:
         vocab_size (int): The number of classes (characters/words), excluding the blank for CTC.
+        
     Author(s): S Karun Vikhash
     """
 
     def __init__(self, vocab_size):
+        """
+        Author(s): S Karun Vikhash
+        """
         super(LipNetModel, self).__init__()
 
         # First 3D convolution: input channels = 1 (grayscale), output channels = 128
@@ -231,6 +246,8 @@ class LipNetModel(nn.Module):
 
         Returns:
             torch.Tensor: Output logits of shape (batch_size, time, vocab_size + 1)
+
+        Author(s): S Karun Vikhash
         """
         # Apply 1st conv layer + ReLU + max pool
         x = self.pool3d_1(torch.relu(self.conv3d_1(x)))
@@ -259,6 +276,7 @@ class LipReadingAPI:
         base_dir (str): Directory where video files are stored.
         video_processor (VideoProcessorBackend): Video processor for extracting lip regions.
         model (LipNetModel): The LipNet model for performing lip-reading predictions.
+        
     Author(s): S Karun Vikhash
     """
 
@@ -269,6 +287,8 @@ class LipReadingAPI:
         Args:
             model_path (str): Path to the pre-trained model.
             base_dir (str): Directory where video files are stored.
+
+        Author(s): S Karun Vikhash
         """
         # 'device' refers to either 'cpu' or 'cuda'
         self.device = device
@@ -292,6 +312,8 @@ class LipReadingAPI:
 
         Returns:
             str: The decoded text string.
+
+        Author(s): S Karun Vikhash
         """
         decoded = []  # List to hold decoded characters
         prev_char = None  # Variable to keep track of the previous character
@@ -317,6 +339,8 @@ class LipReadingAPI:
 
         Returns:
             str: The predicted text from the lip reading model.
+
+        Author(s): S Karun Vikhash
         """
         file_name = os.path.splitext(os.path.basename(video_path))[0]
 
