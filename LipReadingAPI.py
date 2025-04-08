@@ -1,3 +1,4 @@
+# All the author(s): S Karun Vikhash, Hareesh S 
 import cv2
 import mediapipe as mp
 import numpy as np
@@ -32,6 +33,7 @@ class VideoProcessorBackend:
         target_width (int): The width to which the extracted lip region should be resized.
         LIP_LANDMARKS (List[int]): Indices of facial landmarks that correspond to the lips.
         face_mesh (mp.solutions.face_mesh.FaceMesh): Mediapipe FaceMesh model for detecting facial landmarks.
+    Author(s): Hareesh S, S Karun Vikhash
     """
 
     def __init__(self, target_height=46, target_width=140):
@@ -127,6 +129,7 @@ class LipNetDataset(Dataset):
         base_dir (str): Directory where video files are stored.
         target_length (int): Desired number of frames per video sample.
         video_processor (VideoProcessorBackend): Processor to extract and preprocess lip regions from videos.
+    Author(s): S Karun Vikhash
     """
 
     def __init__(self, file_paths: List[str], base_dir: str, target_length: int, video_processor: VideoProcessorBackend):
@@ -191,6 +194,7 @@ class LipNetModel(nn.Module):
 
     Args:
         vocab_size (int): The number of classes (characters/words), excluding the blank for CTC.
+    Author(s): S Karun Vikhash
     """
 
     def __init__(self, vocab_size):
@@ -255,6 +259,7 @@ class LipReadingAPI:
         base_dir (str): Directory where video files are stored.
         video_processor (VideoProcessorBackend): Video processor for extracting lip regions.
         model (LipNetModel): The LipNet model for performing lip-reading predictions.
+    Author(s): S Karun Vikhash
     """
 
     def __init__(self, model_path, base_dir):
