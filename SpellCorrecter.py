@@ -1,3 +1,4 @@
+# All the author(s): Hareesh S 
 import language_tool_python
 import nltk
 import pkg_resources
@@ -8,6 +9,7 @@ from symspellpy import SymSpell, Verbosity
 
 class Preprocessor:
     """Preprocessor class for initializing and loading NLP resources like spellcheckers and grammar tools."""
+    # Author(s): Hareesh S
     
     def __init__(self):
         """
@@ -49,6 +51,7 @@ class Preprocessor:
 
 class SpellCorrector:
     """Handles spelling and grammar correction using the Preprocessor class."""
+    # Author(s): Hareesh S
     
     def __init__(self, preprocessor: Preprocessor):
         """
