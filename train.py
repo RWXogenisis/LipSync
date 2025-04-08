@@ -1,3 +1,4 @@
+# All the author(s): S Karun Vikhash, Hareesh S
 import cv2
 import mediapipe as mp
 import numpy as np
@@ -11,6 +12,8 @@ from typing import List
 from torch.utils.data import Dataset, DataLoader
 
 # ---------------------------- Device Configuration ---------------------------- #
+# Author(s): S Karun Vikhash
+
 # Empty the cache memory
 torch.cuda.empty_cache()
 
@@ -33,16 +36,22 @@ if torch.cuda.is_available():
     print(f"Name of the first GPU: {torch.cuda.get_device_name(0)}")
 
 # ---------------------------- Mediapipe Setup ---------------------------- #
+Author(s): Hareesh S
+
 # Initialize Mediapipe Face Mesh
 mp_face_mesh = mp.solutions.face_mesh
 face_mesh = mp_face_mesh.FaceMesh(static_image_mode=False, max_num_faces=1, refine_landmarks=True)
 
 # -------------------------- Lip Landmark Indexes -------------------------- #
+# Author(s): Hareesh S
+
 # Define Lip Landmark Indices (from Mediapipe's 468 points)
 LIP_LANDMARKS = [61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291, 146, 91, 181, 84, 
                  17, 314, 405, 321, 375, 291]
 
 # ------------------------- Character Mapping -------------------------- #
+# Author(s): S Karun Vikhash
+
 # Vocabulary for the characters used in the lip reading model
 vocab = [x for x in "abcdefghijklmnopqrstuvwxyz'?!0123456789 "]
 char_to_num = {char: idx for idx, char in enumerate(vocab)}
@@ -60,6 +69,8 @@ def load_video(path: str, target_height=46, target_width=140) -> torch.Tensor:
 
     Returns:
         torch.Tensor: Normalized frames of the lip region for training.
+
+    Author(s): Hareesh S
     """
     cap = cv2.VideoCapture(path)
 
@@ -123,6 +134,8 @@ def load_alignments(path: str) -> List[int]:
 
     Returns:
         List[int]: List of indices corresponding to the tokenized alignments.
+
+    Author(s): S Karun Vikhash
     """
     with open(path, 'r') as f:
         lines = f.readlines()
@@ -143,6 +156,8 @@ def load_data(video_path: str, alignment_path: str):
 
     Returns:
         tuple: A tuple containing the frames tensor and alignment indices.
+
+    Author(s): S Karun Vikhash
     """
     frames = load_video(video_path)
     alignments = load_alignments(alignment_path)
@@ -157,8 +172,13 @@ class LipNetDataset(Dataset):
         file_paths (List[str]): List of file paths to video files.
         base_dir (str): Base directory where videos and alignments are stored.
         target_length (int): The target length for padding/truncating video frames.
+
+    Author(s): S Karun Vikhash
     """
     def __init__(self, file_paths: List[str], base_dir: str, target_length: int):
+        """
+        Author(s): S Karun Vikhash
+        """
         self.file_paths = file_paths
         self.base_dir = base_dir
         self.target_length = target_length
@@ -166,6 +186,8 @@ class LipNetDataset(Dataset):
     def __len__(self):
         """
         Returns the number of samples in the dataset.
+
+        Author(s): S Karun Vikhash
         """
         return len(self.file_paths)
     
@@ -178,6 +200,8 @@ class LipNetDataset(Dataset):
 
         Returns:
             tuple: A tuple containing the frames and alignment tensor.
+
+        Author(s): S Karun Vikhash
         """
         # Extract base name (without extension), construct full path to the video file and to the alignment file
         file_name = os.path.splitext(os.path.basename(self.file_paths[idx]))[0]
@@ -215,9 +239,14 @@ class LipNetModel(nn.Module):
 
     Args:
         vocab_size (int): The number of classes (characters/words), excluding the blank for CTC.
+
+    Author(s): S Karun Vikhash
     """
 
     def __init__(self, vocab_size):
+        """
+        Author(s): S Karun Vikhash
+        """
         super(LipNetModel, self).__init__()
 
         # First 3D convolution: input channels = 1 (grayscale), output channels = 128
@@ -251,6 +280,8 @@ class LipNetModel(nn.Module):
 
         Returns:
             torch.Tensor: Output logits of shape (batch_size, time, vocab_size + 1)
+
+        Author(s): S Karun Vikhash
         """
         # Apply 1st conv layer + ReLU + max pool
         x = self.pool3d_1(torch.relu(self.conv3d_1(x)))
@@ -279,6 +310,8 @@ def collate_fn(batch):
 
     Returns:
         Tuple[Tensor, Tensor]: Padded frames and padded alignments
+
+    Author(s): S Karun Vikhash
     """
     # Extract all frames (input data) and alignments (target labels) from the batch
     frames = [item[0] for item in batch]
@@ -299,6 +332,8 @@ def collate_fn(batch):
     return frames_padded, alignments_padded
 
 # -------------------------- Training Prep -------------------------- #
+# Author(s): S Karun Vikhash
+
 # Set the base directory to the current directory
 base_dir = '.\\'
 
@@ -341,6 +376,8 @@ criterion = nn.CTCLoss(blank=len(vocab), zero_infinity=True)
 optimizer = optim.Adam(model.parameters(), lr=1e-5)
 
 # ---------------------------- Training Loop ---------------------------- #
+# Author(s): S Karun Vikhash, Hareesh S
+
 numEpoches = 250
 for epoch in range(numEpoches):
     model.train()   # Set the model to training mode (important for layers like dropout, batch norm, etc.)
@@ -379,11 +416,14 @@ for epoch in range(numEpoches):
     print(f"Epoch {epoch + 1}, Loss: {total_loss / len(dataloader)}, numNan: {numNan}")
 
 # ---------------------------- Save Model ---------------------------- #
+# Author(s): S Karun Vikhash
 # Save the model's state_dict (weights) to a file
 os.makedirs('models', exist_ok=True)
 torch.save(model.state_dict(), 'models/lipnet_mp_actualShuffled.pth')
 
 # ---------------------------- Inference ---------------------------- #
+# Author(s): S Karun Vikhash
+
 model.eval()
 
 # Get the next batch from the dataloader for testing (using the first batch)
