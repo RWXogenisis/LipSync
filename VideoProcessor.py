@@ -4,6 +4,9 @@ import os
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
 
+# ---------------------------- Main Logic ---------------------------- #
+# Author(s): Hareesh S
+
 class VideoProcessor:
     """Handles the processing of videos including segmenting, converting, resizing, and adjusting frame rates.
     Author(s): Hareesh S
