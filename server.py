@@ -9,6 +9,9 @@ from SpellCorrecter import Preprocessor, SpellCorrector
 from VideoProcessor import VideoProcessor
 from waitress import serve
 
+# ---------------------------- Initialization ---------------------------- #
+# Author(s): Hareesh S
+
 # Cache dictionary: {video_path: predicted_caption}
 prediction_cache = {}
 cache_lock = threading.Lock()
@@ -37,6 +40,9 @@ segment_index = 0  # Track which segment to send next
 
 # Add a flag to avoid repeated thread spawns
 prediction_started = False
+
+# ---------------------------- Main Server Logic ---------------------------- #
+# Author(s): Hareesh S, S Karun Vikhash
 
 def loadVideoSegments():
     """
