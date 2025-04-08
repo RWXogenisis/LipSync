@@ -1,10 +1,13 @@
+# All the author(s): Hareesh S
 import cv2
 import os
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
 
 class VideoProcessor:
-    """Handles the processing of videos including segmenting, converting, resizing, and adjusting frame rates."""
+    """Handles the processing of videos including segmenting, converting, resizing, and adjusting frame rates.
+    Author(s): Hareesh S
+    """
     
     def __init__(self, output_folder="videoSegments", fps=26.33):
         """
@@ -13,6 +16,8 @@ class VideoProcessor:
         Args:
             output_folder (str): Folder where processed video segments will be saved.
             fps (float): Frames per second to use when writing video segments.
+            
+        Author(s): Hareesh S
         """
         self.output_folder = output_folder
         self.fps = fps
@@ -21,6 +26,8 @@ class VideoProcessor:
     def _clear_output_folder(self):
         """
         Deletes all files in the output folder before starting a new video processing task.
+        
+        Author(s): Hareesh S
         """
         for file in os.listdir(self.output_folder):
             file_path = os.path.join(self.output_folder, file)
@@ -37,6 +44,8 @@ class VideoProcessor:
         
         Returns:
             str: Direct URL to the video stream or None if there was an error.
+            
+        Author(s): Hareesh S
         """
         try:
             # Run yt-dlp to get the video URL
@@ -59,6 +68,8 @@ class VideoProcessor:
         
         Returns:
             bool: True if conversion succeeded, False otherwise.
+
+        Author(s): Hareesh S
         """
         # FFmpeg command to convert the video to MPEG-2 format
         command = [
@@ -76,6 +87,8 @@ class VideoProcessor:
         
         Returns:
             bool: True if video integrity is valid, False otherwise.
+
+        Author(s): Hareesh S
         """
         cap = cv2.VideoCapture(video_path)  # Open the video file
         if not cap.isOpened():
@@ -104,6 +117,8 @@ class VideoProcessor:
         
         Returns:
             bool: True if resizing was successful, False otherwise.
+
+        Author(s): Hareesh S
         """
         # FFmpeg command to resize the video
         command = [
@@ -123,6 +138,8 @@ class VideoProcessor:
         
         Returns:
             bool: True if FPS change succeeded, False otherwise.
+
+        Author(s): Hareesh S
         """
         # FFmpeg command to change the FPS of the video
         command = [
@@ -141,6 +158,8 @@ class VideoProcessor:
         
         Returns:
             str: Message indicating the result of the processing.
+
+        Author(s): Hareesh S
         """
         # Define paths for input and output video files
         inputSegment = f"{self.output_folder}/segment_{segment_index}.mp4"
@@ -180,6 +199,8 @@ class VideoProcessor:
         
         Returns:
             str: Path to the trimmed video if successful, None otherwise.
+
+        Author(s): Hareesh S
         """
         try:
             # Get the duration of the video
@@ -214,6 +235,8 @@ class VideoProcessor:
         
         Returns:
             tuple: (success (bool), message (str))
+
+        Author(s): Hareesh S
         """
         self._clear_output_folder()  # Clear the output folder before starting
 
