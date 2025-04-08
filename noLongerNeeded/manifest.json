@@ -1,0 +1,27 @@
+{
+    "manifest_version": 3,
+    "name": "Lip Detection Extension",
+    "version": "1.0",
+    "description": "Extracts and displays lip regions from videos playing in the browser.",
+    "permissions": ["activeTab", "scripting"],
+    "host_permissions": ["http://localhost:5000/*"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"],
+        "run_at": "document_idle"
+      }
+    ],
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16": "icon.png",
+        "48": "icon.png",
+        "128": "icon.png"
+      }
+    }
+  }
+  
