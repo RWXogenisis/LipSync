@@ -9,6 +9,9 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 
+# ---------------------------- Initialization ---------------------------- #
+# Author(s): S Karun Vikhash
+
 # Device configuration: 
 # Check if a CUDA-enabled GPU is available, otherwise use CPU
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -23,6 +26,9 @@ char_to_num = {char: idx for idx, char in enumerate(vocab)}
 
 # Create a reverse mapping from numerical indices back to characters (for decoding model outputs)
 num_to_char = {idx: char for char, idx in char_to_num.items()}
+
+# ---------------------------- Main Logic ---------------------------- #
+# Author(s): S Karun Vikhash, Hareesh S
 
 class VideoProcessorBackend:
     """
