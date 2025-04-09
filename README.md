@@ -13,6 +13,8 @@ LipCap is a browser extension that generates **real-time subtitles** for video c
 - [About the Project](#-about-the-project)
 - [Problem Statement](#-problem-statement)
 - [Scope](#-scope)
+- [Conceptual Architecture](#-conceptual-architecture)
+- [Functional Diagram](#functional-diagram)
 - [Getting Started](#-getting-started)
 - [Training](#-training)
 - [Deployment (Browser Extension)](#-deployment-browser-extension)
@@ -50,6 +52,14 @@ Traditional subtitle generators depend on clear audio, which isn't always availa
 
 ---
 
+## Conceptual Architecture
+![Conceptual Architecture](https://github.com/RWXogenisis/LipSync/blob/main/Conceptual%20Architecture.png)
+---
+
+## Functional Architecture
+![Functional Architecture](https://github.com/RWXogenisis/LipSync/blob/main/Functional%20Diagram.png)
+
+---
 ## Getting Started
 
 ### Prerequisites
