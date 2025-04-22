@@ -203,45 +203,46 @@ class LipNetDataset(Dataset):
         # Add a channel dimension (1) to make it (1, T, H, W) format for CNN input
         return frames.unsqueeze(0)
 
+# ------------------------ Model Definition ------------------------ #   
+import torch
+import torch.nn as nn
+
 class LipNetModel(nn.Module):
     """
     Defines the LipNet model architecture for lip reading.
-    The model consists of 3D convolutional layers followed by a bidirectional LSTM
+    The model consists of 3D convolutional layers followed by a bidirectional GRU
     and a fully connected output layer.
 
     Args:
         vocab_size (int): The number of classes (characters/words), excluding the blank for CTC.
-        
-    Author(s): S Karun Vikhash
+
+    Author(s): S Karun Vikhash (modified for Bi-GRU)
     """
 
     def __init__(self, vocab_size):
         """
-        Author(s): S Karun Vikhash
+        Author(s): S Karun Vikhash (modified for Bi-GRU)
         """
         super(LipNetModel, self).__init__()
 
         # First 3D convolution: input channels = 1 (grayscale), output channels = 128
         self.conv3d_1 = nn.Conv3d(1, 128, kernel_size=3, padding=1)
-
-        # 3D max pooling over (time=1, height=2, width=2) to reduce spatial size
-        self.pool3d_1 = nn.MaxPool3d((1, 2, 2))
+        self.pool3d_1 = nn.MaxPool3d((1, 2, 2))  # Time stays, spatial reduces
 
         # Second 3D convolution: output channels = 256
         self.conv3d_2 = nn.Conv3d(128, 256, kernel_size=3, padding=1)
-        self.pool3d_2 = nn.MaxPool3d((1, 2, 2))  # Further reduce spatial resolution
+        self.pool3d_2 = nn.MaxPool3d((1, 2, 2))
 
         # Third 3D convolution: output channels = 75
         self.conv3d_3 = nn.Conv3d(256, 75, kernel_size=3, padding=1)
-        self.pool3d_3 = nn.MaxPool3d((1, 2, 2))  # Final spatial downsampling
+        self.pool3d_3 = nn.MaxPool3d((1, 2, 2))
 
-        # Bidirectional LSTM for sequence modeling
-        # Input size: 75 feature maps * 5 (height) * 17 (width) = 6375
-        # Output size: 128 units * 2 directions = 256
-        self.lstm = nn.LSTM(75 * 5 * 17, 128, num_layers=2, bidirectional=True, batch_first=True)
+        # Bidirectional GRU for sequence modeling
+        # Input size: 75 * 5 * 17 = 6375
+        self.gru = nn.GRU(75 * 5 * 17, 128, num_layers=2, bidirectional=True, batch_first=True)
 
-        # Fully connected layer for final classification (output: vocab_size + 1 for CTC blank)
-        self.fc = nn.Linear(256, vocab_size + 1)
+        # Final classifier
+        self.fc = nn.Linear(256, vocab_size + 1)  # 256 = 128 * 2 (Bi-directional)
 
     def forward(self, x):
         """
@@ -253,24 +254,20 @@ class LipNetModel(nn.Module):
         Returns:
             torch.Tensor: Output logits of shape (batch_size, time, vocab_size + 1)
 
-        Author(s): S Karun Vikhash
+        Author(s): S Karun Vikhash (modified for Bi-GRU)
         """
-        # Apply 1st conv layer + ReLU + max pool
+        # 3D Conv layers with ReLU and pooling
         x = self.pool3d_1(torch.relu(self.conv3d_1(x)))
-
-        # Apply 2nd conv layer + ReLU + max pool
         x = self.pool3d_2(torch.relu(self.conv3d_2(x)))
-
-        # Apply 3rd conv layer + ReLU + max pool
         x = self.pool3d_3(torch.relu(self.conv3d_3(x)))
 
-        # Reshape from (B, C, T, H, W) -> (B, T, C * H * W) for LSTM
-        x = x.view(x.size(0), x.size(2), -1)
+        # Reshape to (B, T, Features)
+        x = x.view(x.size(0), x.size(2), -1)  # (Batch, Time, 75*5*17)
 
-        # Pass through bidirectional LSTM
-        x, _ = self.lstm(x)
+        # Pass through GRU
+        x, _ = self.gru(x)
 
-        # Final linear layer to get class logits per time step
+        # Classifier
         return self.fc(x)
 
 class LipReadingAPI:
